@@ -55,7 +55,7 @@ export default function ProfileScreen() {
       id: 1,
       name: "Home",
       icon: "home",
-      action: () => navigation.navigate("Home"), // Điều hướng đến Home
+      action: () => navigation.navigate("home"), // Điều hướng đến Home
     },
     {
       id: 2,
