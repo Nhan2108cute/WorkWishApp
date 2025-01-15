@@ -26,7 +26,7 @@ export default function ProfileScreen({ route, navigation }) {
             throw new Error("No access token found.");
           }
 
-          const response = await fetch("http://192.168.110.223:8000/api/users", {
+          const response = await fetch("http://192.168.110.72:8000/api/users", {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
@@ -78,6 +78,12 @@ export default function ProfileScreen({ route, navigation }) {
     },
     {
       id: 2,
+      name: `Job Applied ()`,
+      icon: "bookmark-sharp",
+      action: () => navigation.navigate("applied-jobs"), // Điều hướng đến trang danh sách công việc đã ứng tuyển
+    },
+    {
+      id: 3,
       name: "Logout",
       icon: "log-out",
       action: handleLogout,
