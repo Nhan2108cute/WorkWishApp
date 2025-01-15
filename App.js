@@ -7,14 +7,10 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import TabNavigation from "./App/Navigations/TabNavigation";
 import ProfileScreen from "./App/Screens/ProfileScreen/ProfileScreen";
-import BusinessDetails from "./App/Screens/BusinessDetailsScreen/BusinessDetailsScreen"; // Đường dẫn đến màn hình BusinessDetails
+import BusinessDetails from "./App/Screens/BusinessDetailsScreen/BusinessDetailsScreen"; // Màn hình BusinessDetails
+import HomeScreen from "./App/Screens/HomeScreen/HomeScreen";
+
 const Stack = createStackNavigator();
-<Stack.Navigator screenOptions={{ headerShown: false }}>
-  {/* Các màn hình khác */}
-  <Stack.Screen name="business-details" component={BusinessDetails} />
-</Stack.Navigator>
-
-
 
 const tokenCache = {
   async getToken(key) {
@@ -50,10 +46,12 @@ export default function App() {
       <NavigationContainer>
         <StatusBar style="auto" />
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          {/* If user is signed out, show Login screen */}
+          {/* Hiển thị màn hình Login nếu người dùng chưa đăng nhập */}
           <Stack.Screen name="Login" component={Login} />
-          {/* If user is signed in, show the TabNavigation */}
+          {/* Chuyển đến màn hình Home khi đăng nhập thành công */}
           <Stack.Screen name="TabNavigation" component={TabNavigation} />
+          <Stack.Screen name="Profile" component={ProfileScreen} />
+          <Stack.Screen name="business-details" component={BusinessDetails} />
         </Stack.Navigator>
       </NavigationContainer>
     </ClerkProvider>
@@ -62,7 +60,7 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1, // Đảm bảo bố cục chiếm toàn bộ màn hình
+    flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
