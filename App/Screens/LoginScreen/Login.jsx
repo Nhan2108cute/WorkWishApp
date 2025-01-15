@@ -32,7 +32,7 @@ export default function Login({ navigation }) {
         // Lưu token vào AsyncStorage
         await AsyncStorage.setItem("access_token", data.access_token);
 
-        // Chuyển hướng đến màn hình Home
+        // Chuyển hướng đến màn hình Tab 
         navigation.reset({
           index: 0,
           routes: [{ name: "TabNavigation" }],
@@ -54,6 +54,8 @@ export default function Login({ navigation }) {
         <ActivityIndicator size="large" color="#0000ff" />
       ) : (
         <>
+        <Text style={{fontSize: 30, fontWeight: "bold"}}>Chào mừng đến với WishWork</Text>
+          
           <Text style={styles.label}>Email</Text>
           <TextInput
             style={styles.input}
