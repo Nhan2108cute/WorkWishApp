@@ -7,7 +7,7 @@ export default function BusinessDetailsScreen({ route }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`http://192.168.110.72:8000/api/jobs/${jobId}`)
+    fetch(`http://192.168.110.223:8000/api/jobs/${jobId}`)
       .then(response => response.json())
       .then(data => {
         setJobDetails(data);

@@ -9,7 +9,7 @@ export default function HomeScreen() {
   const navigation = useNavigation();
 
   useEffect(() => {
-    fetch("http://192.168.110.72:8000/api/jobs")
+    fetch("http://192.168.110.223:8000/api/jobs")
       .then(response => response.json())
       .then(data => {
         setJobs(data);

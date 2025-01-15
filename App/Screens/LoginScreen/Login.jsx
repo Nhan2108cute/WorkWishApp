@@ -1,28 +1,22 @@
+import React, { useState } from "react";
 import {
   View,
   Text,
-  StyleSheet,
-  TouchableOpacity,
   TextInput,
+  Button,
+  StyleSheet,
+  ActivityIndicator,
   Alert,
 } from "react-native";
-import React, { useState } from "react";
-import { useNavigation } from "@react-navigation/native";
-import Color from "../../Utils/Color";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function Login() {
+export default function Login({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const navigation = useNavigation();
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
-    if (!email || !password) {
-      Alert.alert("Error", "Please enter both email and password.");
-      return;
-    }
-
-    setIsLoading(true);
+    setLoading(true);
     try {
       const response = await fetch("http://192.168.110.223:8000/api/login", {
         method: "POST",
@@ -34,56 +28,50 @@ export default function Login() {
 
       const data = await response.json();
 
-      if (response.ok) {
-        Alert.alert("Success", "Login successfully!");
-        // Chuyển sang màn hình Profile và truyền thông tin người dùng
+      if (response.ok && data.access_token) {
+        // Lưu token vào AsyncStorage
+        await AsyncStorage.setItem("access_token", data.access_token);
+
+        // Chuyển hướng đến màn hình Home
         navigation.reset({
           index: 0,
-          routes: [
-            {
-              name: "TabNavigation",
-            },
-          ],
+          routes: [{ name: "TabNavigation" }],
         });
       } else {
-        Alert.alert("Error", data.message || "Login failed. Please try again.");
+        Alert.alert("Error", data.message || "Login failed!");
       }
     } catch (error) {
       console.error("Login error:", error);
       Alert.alert("Error", "An error occurred. Please try again.");
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Enter your email"
-        placeholderTextColor={Color.GRAY}
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Enter your password"
-        placeholderTextColor={Color.GRAY}
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
-      <TouchableOpacity
-        style={styles.button}
-        onPress={handleLogin}
-        disabled={isLoading}
-      >
-        <Text style={styles.buttonText}>
-          {isLoading ? "Logging in..." : "Login"}
-        </Text>
-      </TouchableOpacity>
+      {loading ? (
+        <ActivityIndicator size="large" color="#0000ff" />
+      ) : (
+        <>
+          <Text style={styles.label}>Email</Text>
+          <TextInput
+            style={styles.input}
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+          />
+          <Text style={styles.label}>Password</Text>
+          <TextInput
+            style={styles.input}
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+          />
+          <Button title="Login" onPress={handleLogin} />
+        </>
+      )}
     </View>
   );
 }
@@ -91,29 +79,17 @@ export default function Login() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
     padding: 20,
+    justifyContent: "center",
   },
-  title: {
-    fontSize: 24,
-    textAlign: "center",
-    marginBottom: 20,
+  label: {
+    fontSize: 16,
+    marginBottom: 8,
   },
   input: {
     borderWidth: 1,
     borderColor: "#ccc",
     padding: 10,
-    marginBottom: 10,
-    borderRadius: 5,
-  },
-  button: {
-    backgroundColor: Color.PRIMARY,
-    padding: 15,
-    borderRadius: 5,
-  },
-  buttonText: {
-    color: "#fff",
-    textAlign: "center",
-    fontSize: 16,
+    marginBottom: 20,
   },
 });
