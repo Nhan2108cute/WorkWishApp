@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, FlatList, ActivityIndicator, StyleSheet } from "react-native";
+import { View, Text, FlatList, ActivityIndicator, StyleSheet, TouchableOpacity } from "react-native";
 import Header from "./Header"; // Giữ nguyên Header
+import { useNavigation } from "@react-navigation/native";
 
 export default function HomeScreen() {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigation = useNavigation();
 
   useEffect(() => {
     fetch("http://192.168.110.72:8000/api/jobs")
@@ -21,8 +23,8 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <Header /> 
-      
+      <Header />
+
       <Text style={styles.title}>Danh sách công việc</Text>
 
       {loading ? (
@@ -32,11 +34,14 @@ export default function HomeScreen() {
           data={jobs}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
-            <View style={styles.jobItem}>
+            <TouchableOpacity
+              style={styles.jobItem}
+              onPress={() => navigation.navigate("business-details", { jobId: item.id })}
+            >
               <Text style={styles.jobTitle}>{item.title}</Text>
               <Text>{item.description}</Text>
               <Text style={styles.salary}>💰 Lương: {item.salary}</Text>
-            </View>
+            </TouchableOpacity>
           )}
         />
       )}
