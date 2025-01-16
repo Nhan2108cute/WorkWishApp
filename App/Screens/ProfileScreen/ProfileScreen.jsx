@@ -26,7 +26,7 @@ export default function ProfileScreen({ route, navigation }) {
             throw new Error("No access token found.");
           }
 
-          const response = await fetch("http://192.168.110.223:8000/api/users", {
+          const response = await fetch("http://192.168.110.65:8000/api/users", {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
